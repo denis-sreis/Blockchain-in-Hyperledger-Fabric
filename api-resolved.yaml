@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: Data Provenance API
+  description: API REST para armazenamento e consulta de dados de proveniência em Hyperledger Fabric.
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/api
+  description: Servidor local de desenvolvimento
+paths:
+  /data:
+    post:
+      summary: Adicionar dado
+      description: Adiciona um novo dado de proveniência à blockchain.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/data_body"
+        required: true
+      responses:
+        "200":
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200"
+        "500":
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+  /data/{id}:
+    get:
+      summary: Consultar dado
+      description: Retorna um dado de proveniência armazenado na blockchain pelo ID.
+      parameters:
+      - name: id
+        in: path
+        description: Identificador único do dado
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/data_body"
+        "500":
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_500"
+components:
+  schemas:
+    data_body:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123"
+        content:
+          type: string
+          example: Exemplo de conteúdo armazenado
+    inline_response_200:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "123"
+    inline_response_500:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Mensagem do erro
